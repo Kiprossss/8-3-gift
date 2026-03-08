@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>For You 🖤</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@300&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+background:radial-gradient(circle at top,#0a0a18,#000);
+color:#ddd;
+font-family:'Cormorant Garamond',serif;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+text-align:center;
+}
+
+/* moon */
+
+.moon{
+position:absolute;
+top:70px;
+width:120px;
+height:120px;
+background:#f5f3ce;
+border-radius:50%;
+box-shadow:0 0 40px #fff,0 0 90px #bbb;
+animation:moonGlow 5s infinite alternate;
+}
+
+@keyframes moonGlow{
+from{box-shadow:0 0 30px #fff;}
+to{box-shadow:0 0 100px #fff;}
+}
+
+/* stars */
+
+.star{
+position:absolute;
+width:2px;
+height:2px;
+background:white;
+animation:twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle{
+from{opacity:.2;}
+to{opacity:1;}
+}
+
+/* shooting star */
+
+.shooting{
+position:absolute;
+width:2px;
+height:100px;
+background:linear-gradient(white,transparent);
+transform:rotate(45deg);
+animation:shoot 1s linear forwards;
+}
+
+@keyframes shoot{
+from{opacity:1;transform:translate(0,0) rotate(45deg);}
+to{opacity:0;transform:translate(400px,400px) rotate(45deg);}
+}
+
+/* heart */
+
+.heart{
+font-size:65px;
+cursor:pointer;
+margin-top:20px;
+}
+
+.heart.cooldown{
+opacity:.4;
+cursor:not-allowed;
+}
+
+.beat{
+animation:beat .6s;
+}
+
+@keyframes beat{
+0%{transform:scale(1);}
+50%{transform:scale(1.35);}
+100%{transform:scale(1);}
+}
+
+/* blood drops */
+
+.blood-drop{
+position:absolute;
+width:6px;
+height:10px;
+background:#8b0000;
+border-radius:50%;
+animation:fallBlood 2s linear forwards;
+box-shadow:0 0 6px rgba(139,0,0,0.8);
+}
+
+@keyframes fallBlood{
+0%{
+transform:translateY(-20px);
+opacity:1;
+}
+100%{
+transform:translateY(110vh);
+opacity:0;
+}
+}
+
+/* message */
+
+#message{
+margin-top:20px;
+font-size:20px;
+max-width:85%;
+min-height:80px;
+}
+
+h2{
+font-family:'Cinzel',serif;
+font-weight:400;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="moon"></div>
+
+<h2>The night hides something for you...</h2>
+
+<div id="heart" class="heart">🖤</div>
+
+<div id="message"></div>
+
+<script>
+
+/* stars */
+
+for(let i=0;i<80;i++){
+
+let star=document.createElement("div");
+star.className="star";
+
+star.style.left=Math.random()*100+"vw";
+star.style.top=Math.random()*100+"vh";
+star.style.animationDelay=Math.random()*3+"s";
+
+document.body.appendChild(star);
+
+}
+
+/* shooting stars */
+
+setInterval(()=>{
+
+let star=document.createElement("div");
+star.className="shooting";
+
+star.style.left=Math.random()*80+"vw";
+star.style.top=Math.random()*40+"vh";
+
+document.body.appendChild(star);
+
+setTimeout(()=>star.remove(),1000);
+
+},8000);
+
+/* messages */
+
+const messages=[
+
+"I promise to always care for you, support you, and stand by your side",
+"You mean more to me than words could ever truly explain",
+"Today and every day, I love you more than anything in this world",
+"Every day I thank the universe for bringing you into my life",
+"My love for you will never fade away",
+"My heart belongs only to you, baby",
+"You are the love of my life",
+"Just thinking about you makes my day better",
+"Nobody is perfect, but to me you are",
+"Being in love with you is the best thing that ever happened to me",
+"You are my queen, I love you",
+"You are the best girlfriend ever, I love you",
+"I love you baby, mwahhh"
+
+];
+
+/* blood effect */
+
+function bloodBurst(){
+
+for(let i=0;i<40;i++){
+
+let drop=document.createElement("div");
+drop.className="blood-drop";
+
+drop.style.left=Math.random()*100+"vw";
+drop.style.top=(window.innerHeight/2 + Math.random()*80)+"px";
+drop.style.animationDuration=(1.5+Math.random()*1.5)+"s";
+
+document.body.appendChild(drop);
+
+setTimeout(()=>drop.remove(),2000);
+
+}
+
+}
+
+/* heart logic */
+
+let heart=document.getElementById("heart");
+let messageBox=document.getElementById("message");
+let cooldown=false;
+
+heart.addEventListener("click",()=>{
+
+if(cooldown) return;
+
+cooldown=true;
+heart.classList.add("cooldown");
+
+/* heart beat */
+
+heart.classList.remove("beat");
+void heart.offsetWidth;
+heart.classList.add("beat");
+
+/* reset text */
+
+messageBox.innerHTML="";
+
+/* blood burst */
+
+bloodBurst();
+
+/* random message */
+
+let text=messages[Math.floor(Math.random()*messages.length)];
+
+typeMessage(text);
+
+/* cooldown */
+
+setTimeout(()=>{
+cooldown=false;
+heart.classList.remove("cooldown");
+},2000);
+
+});
+
+/* typewriter */
+
+function typeMessage(text){
+
+let i=0;
+
+function typing(){
+
+if(i<text.length){
+
+messageBox.innerHTML+=text.charAt(i);
+i++;
+
+setTimeout(typing,40);
+
+}
+
+}
+
+typing();
+
+}
+
+</script>
+
+</body>
+</html>
